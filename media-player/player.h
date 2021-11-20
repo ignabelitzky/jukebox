@@ -6,6 +6,7 @@
 #include <QtMultimedia/QAudioOutput>
 #include <QPushButton>
 #include <QSlider>
+#include <QLabel>
 
 class Player : public QWidget
 {
@@ -22,6 +23,7 @@ private slots:
 private:
     QMediaPlayer *m_player = nullptr;
     QAudioOutput *m_audioOutput = nullptr;
+    QLabel *m_titleLabel = nullptr;
 };
 
 #endif // PLAYER_H

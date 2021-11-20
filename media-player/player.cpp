@@ -3,12 +3,17 @@
 #include <QFileDialog>
 #include <QBoxLayout>
 #include <QStandardPaths>
+#include <QMediaMetaData>
+#include <QString>
 
 Player::Player(QWidget *parent) : QWidget(parent)
 {
     m_player = new QMediaPlayer(this);
     m_audioOutput = new QAudioOutput(this);
     m_player->setAudioOutput(m_audioOutput);
+
+    m_titleLabel = new QLabel(tr("No file loaded."), this);
+    m_titleLabel->setAlignment(Qt::AlignCenter);
 
     QPushButton *openButton = new QPushButton(tr("Open"), this);
 
@@ -29,6 +34,7 @@ Player::Player(QWidget *parent) : QWidget(parent)
     connect(m_audioOutput, &QAudioOutput::volumeChanged, controls, &PlayerControls::setVolume);
     connect(m_audioOutput, &QAudioOutput::mutedChanged, controls, &PlayerControls::setMuted);
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
 
     QBoxLayout *controlLayout = new QHBoxLayout;
     controlLayout->setContentsMargins(0, 0, 0, 0);
@@ -37,14 +43,21 @@ Player::Player(QWidget *parent) : QWidget(parent)
     controlLayout->addWidget(controls);
     controlLayout->addStretch(1);
 
-    setLayout(controlLayout);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->addWidget(m_titleLabel, Qt::AlignCenter);
+    mainLayout->addStretch(1);
+    mainLayout->addLayout(controlLayout);
+    mainLayout->addStretch(1);
 
+    setWindowTitle(tr("Jukebox"));
+    setLayout(mainLayout);
 }
 
 Player::~Player()
 {
     delete m_player;
     delete m_audioOutput;
+    delete m_titleLabel;
 }
 
 void Player::open()
@@ -53,5 +66,8 @@ void Player::open()
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog.setWindowTitle(tr("Open File"));
     fileDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).value(0, QDir::homePath()));
-    m_player->setSource(fileDialog.getOpenFileUrl());
+    QUrl file = fileDialog.getOpenFileUrl();
+    m_player->setSource(file);
+    emit m_player->play();
+    m_titleLabel->setText(file.toString());
 }

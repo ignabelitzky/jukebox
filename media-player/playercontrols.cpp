@@ -37,10 +37,10 @@ PlayerControls::PlayerControls(QWidget *parent) : QWidget(parent)
 
     QBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(m_playButton);
-    layout->addWidget(m_stopButton);
-    layout->addWidget(m_nextButton);
     layout->addWidget(m_previousButton);
+    layout->addWidget(m_playButton);
+    layout->addWidget(m_nextButton);
+    layout->addWidget(m_stopButton);
     layout->addWidget(m_muteButton);
     layout->addWidget(m_volumeSlider);
     setLayout(layout);
