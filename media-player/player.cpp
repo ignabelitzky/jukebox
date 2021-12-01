@@ -3,8 +3,8 @@
 #include <QFileDialog>
 #include <QBoxLayout>
 #include <QStandardPaths>
-#include <QMediaMetaData>
 #include <QString>
+#include <QTime>
 
 Player::Player(QWidget *parent) : QWidget(parent)
 {
@@ -33,6 +33,8 @@ Player::Player(QWidget *parent) : QWidget(parent)
     connect(m_player, &QMediaPlayer::playbackStateChanged, controls, &PlayerControls::setState);
     connect(m_audioOutput, &QAudioOutput::volumeChanged, controls, &PlayerControls::setVolume);
     connect(m_audioOutput, &QAudioOutput::mutedChanged, controls, &PlayerControls::setMuted);
+
+    connect(m_player, &QMediaPlayer::metaDataChanged, this, &Player::setMetadata);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -68,6 +70,12 @@ void Player::open()
     fileDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::MusicLocation).value(0, QDir::homePath()));
     QUrl file = fileDialog.getOpenFileUrl();
     m_player->setSource(file);
-    emit m_player->play();
-    m_titleLabel->setText(file.toString());
+    m_player->play();
+}
+
+void Player::setMetadata()
+{
+    // Set title
+    m_metaData = m_player->metaData();
+    m_titleLabel->setText(m_metaData.stringValue(QMediaMetaData::Title));
 }
