@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QLabel>
+#include <QLineEdit>
+#include "config.h"
 
 class Player : public QWidget
 {
@@ -25,9 +27,11 @@ private slots:
 private:
     QMediaPlayer *m_player = nullptr;
     QAudioOutput *m_audioOutput = nullptr;
+
     QLabel *m_titleLabel = nullptr;
+    QLineEdit *m_titleLineEdit = nullptr;
+
     QMediaMetaData m_metaData;
-    QString title;
 };
 
 #endif // PLAYER_H

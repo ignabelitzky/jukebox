@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
         player.h
         playercontrols.cpp
         playercontrols.h
+        config.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

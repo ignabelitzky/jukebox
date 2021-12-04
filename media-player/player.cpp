@@ -12,10 +12,16 @@ Player::Player(QWidget *parent) : QWidget(parent)
     m_audioOutput = new QAudioOutput(this);
     m_player->setAudioOutput(m_audioOutput);
 
-    m_titleLabel = new QLabel(tr("No file loaded."), this);
+    m_titleLabel = new QLabel(tr("Title:"), this);
     m_titleLabel->setAlignment(Qt::AlignCenter);
+    m_titleLabel->adjustSize();
 
-    QPushButton *openButton = new QPushButton(tr("Open"), this);
+    m_titleLineEdit = new QLineEdit(this);
+    m_titleLineEdit->setAlignment(Qt::AlignCenter);
+    m_titleLineEdit->setFixedSize(250,25);
+    m_titleLineEdit->setReadOnly(true);
+
+    QPushButton *openButton = new QPushButton(tr("Open File"), this);
 
     connect(openButton, &QPushButton::clicked, this, &Player::open);
 
@@ -39,20 +45,29 @@ Player::Player(QWidget *parent) : QWidget(parent)
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
     QBoxLayout *controlLayout = new QHBoxLayout;
-    controlLayout->setContentsMargins(0, 0, 0, 0);
+    controlLayout->setContentsMargins(5, 5, 5, 5);
     controlLayout->addWidget(openButton);
     controlLayout->addStretch(1);
-    controlLayout->addWidget(controls);
+    controlLayout->addWidget(controls, Qt::AlignCenter);
     controlLayout->addStretch(1);
 
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->addWidget(m_titleLabel, Qt::AlignCenter);
+    QBoxLayout *metadataLayout = new QHBoxLayout;
+    metadataLayout->setContentsMargins(5, 5, 5, 5);
+    metadataLayout->addWidget(m_titleLabel, Qt::AlignCenter);
+    metadataLayout->addStretch(1);
+    metadataLayout->addWidget(m_titleLineEdit, Qt::AlignCenter);
+    metadataLayout->addStretch(1);
+
+    mainLayout->setContentsMargins(5, 5, 5, 5);
+    mainLayout->addLayout(metadataLayout, Qt::AlignCenter);
     mainLayout->addStretch(1);
     mainLayout->addLayout(controlLayout);
     mainLayout->addStretch(1);
 
     setWindowTitle(tr("Jukebox"));
     setLayout(mainLayout);
+
+    this->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 Player::~Player()
@@ -60,6 +75,7 @@ Player::~Player()
     delete m_player;
     delete m_audioOutput;
     delete m_titleLabel;
+    delete m_titleLineEdit;
 }
 
 void Player::open()
@@ -77,5 +93,6 @@ void Player::setMetadata()
 {
     // Set title
     m_metaData = m_player->metaData();
-    m_titleLabel->setText(m_metaData.stringValue(QMediaMetaData::Title));
+    m_titleLineEdit->setText(m_metaData.stringValue(QMediaMetaData::Title));
+    m_titleLineEdit->adjustSize();
 }

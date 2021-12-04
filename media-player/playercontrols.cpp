@@ -36,7 +36,7 @@ PlayerControls::PlayerControls(QWidget *parent) : QWidget(parent)
     connect(m_volumeSlider, &QSlider::valueChanged, this, &PlayerControls::onVolumeSliderValueChanged);
 
     QBoxLayout *layout = new QHBoxLayout;
-    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setContentsMargins(5, 5, 5, 5);
     layout->addWidget(m_previousButton);
     layout->addWidget(m_playButton);
     layout->addWidget(m_nextButton);
