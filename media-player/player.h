@@ -31,6 +31,9 @@ private:
     QLabel *m_titleLabel = nullptr;
     QLineEdit *m_titleLineEdit = nullptr;
 
+    QLabel *m_artistLabel = nullptr;
+    QLineEdit *m_artistLineEdit = nullptr;
+
     QMediaMetaData m_metaData;
 };
 

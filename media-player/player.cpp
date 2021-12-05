@@ -21,6 +21,15 @@ Player::Player(QWidget *parent) : QWidget(parent)
     m_titleLineEdit->setFixedSize(250,25);
     m_titleLineEdit->setReadOnly(true);
 
+    m_artistLabel = new QLabel(tr("Artist:"), this);
+    m_artistLabel->setAlignment(Qt::AlignCenter);
+    m_artistLabel->adjustSize();
+
+    m_artistLineEdit = new QLineEdit(this);
+    m_artistLineEdit->setAlignment(Qt::AlignCenter);
+    m_artistLineEdit->setFixedSize(250, 25);
+    m_artistLineEdit->setReadOnly(true);
+
     QPushButton *openButton = new QPushButton(tr("Open File"), this);
 
     connect(openButton, &QPushButton::clicked, this, &Player::open);
@@ -51,15 +60,24 @@ Player::Player(QWidget *parent) : QWidget(parent)
     controlLayout->addWidget(controls, Qt::AlignCenter);
     controlLayout->addStretch(1);
 
-    QBoxLayout *metadataLayout = new QHBoxLayout;
-    metadataLayout->setContentsMargins(5, 5, 5, 5);
-    metadataLayout->addWidget(m_titleLabel, Qt::AlignCenter);
-    metadataLayout->addStretch(1);
-    metadataLayout->addWidget(m_titleLineEdit, Qt::AlignCenter);
-    metadataLayout->addStretch(1);
+    QBoxLayout *titleLayout = new QHBoxLayout;
+    titleLayout->setContentsMargins(2, 2, 2, 2);
+    titleLayout->addWidget(m_titleLabel, Qt::AlignCenter);
+    titleLayout->addStretch(1);
+    titleLayout->addWidget(m_titleLineEdit, Qt::AlignCenter);
+    titleLayout->addStretch(1);
+
+    QBoxLayout *artistLayout = new QHBoxLayout;
+    artistLayout->setContentsMargins(2, 2, 2, 2);
+    artistLayout->addWidget(m_artistLabel, Qt::AlignCenter);
+    artistLayout->addStretch(1);
+    artistLayout->addWidget(m_artistLineEdit, Qt::AlignCenter);
+    artistLayout->addStretch(1);
 
     mainLayout->setContentsMargins(5, 5, 5, 5);
-    mainLayout->addLayout(metadataLayout, Qt::AlignCenter);
+    mainLayout->addLayout(titleLayout, Qt::AlignCenter);
+    mainLayout->addStretch(1);
+    mainLayout->addLayout(artistLayout, Qt::AlignCenter);
     mainLayout->addStretch(1);
     mainLayout->addLayout(controlLayout);
     mainLayout->addStretch(1);
@@ -95,4 +113,8 @@ void Player::setMetadata()
     m_metaData = m_player->metaData();
     m_titleLineEdit->setText(m_metaData.stringValue(QMediaMetaData::Title));
     m_titleLineEdit->adjustSize();
+
+    // Set artist
+    m_artistLineEdit->setText(m_metaData.stringValue(QMediaMetaData::AlbumArtist));
+    m_artistLineEdit->adjustSize();
 }
