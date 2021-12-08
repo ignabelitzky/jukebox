@@ -9,6 +9,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QLineEdit>
+#include "playercontrols.h"
 #include "config.h"
 
 class Player : public QWidget
@@ -34,7 +35,17 @@ private:
     QLabel *m_artistLabel = nullptr;
     QLineEdit *m_artistLineEdit = nullptr;
 
+    QPushButton *m_openButton = nullptr;
+
+    PlayerControls *m_controls = nullptr;
+
     QMediaMetaData m_metaData;
+
+    void set_controls();
+    void set_connections();
+    void set_metadata_gui();
+    void set_layouts_gui();
+    void set_gui();
 };
 
 #endif // PLAYER_H
